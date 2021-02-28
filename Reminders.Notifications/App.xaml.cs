@@ -1,17 +1,14 @@
 ﻿using System.Windows;
 using Prism.Ioc;
-using Reminders.Views;
+using Reminders.Notifications.Views;
 
-namespace Reminders
+namespace Reminders.Notifications
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App
     {
         protected override Window CreateShell()
         {
-            return Container.Resolve<MainWindow>();
+            return Container.Resolve<NotificationWindow>();
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)

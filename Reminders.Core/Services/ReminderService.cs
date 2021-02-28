@@ -20,11 +20,21 @@ namespace Reminders.Core.Services
         public ReminderService(IReminderRepository reminderRepository)
         {
             _reminderRepository = reminderRepository;
+            Randomize();
         }
 
         #region Methods
 
         #region Public
+
+        private async void Randomize()
+        {
+            for(int i = 1; i <= 50; i++)
+            {
+                await Task.Delay(2000);
+                await AddAsync(new Reminder() { Text = $"Reminder {i}" });
+            }
+        }
 
         public async Task AddAsync(Reminder reminder)
         {

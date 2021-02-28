@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using MaterialDesignThemes.Wpf;
-using Reminders.Core.Dialogs.ViewModels;
+using Reminders.Core.Controls.Dialogs.ViewModels;
 using Reminders.Core.Services.Interfaces;
 
 namespace Reminders.Core.Services
