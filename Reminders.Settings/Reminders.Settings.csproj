@@ -3,8 +3,9 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
-    <AssemblyName>Reminders</AssemblyName>
+    <AssemblyName>Reminders.Settings</AssemblyName>
     <ApplicationIcon>Resources\Icons\icon.ico</ApplicationIcon>
+    <RootNamespace>Reminders.Settings</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath></OutputPath>

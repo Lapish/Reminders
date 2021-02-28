@@ -13,7 +13,7 @@ using Reminders.Core.Models;
 using Reminders.Core.MVVM;
 using Reminders.Core.Services.Interfaces;
 
-namespace Reminders.ViewModels
+namespace Reminders.Settings.ViewModels
 {
     public class ConfigViewModel : ViewModelBase
     {

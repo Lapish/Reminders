@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31019.35
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Core", "Reminders.Core\Reminders.Core.csproj", "{DD35AD83-DA1A-44E3-9A7F-4A74AF23B85D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reminders", "Reminders\Reminders.csproj", "{35A03433-1BDD-406E-898D-61811935B793}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Settings", "Reminders.Settings\Reminders.Settings.csproj", "{35A03433-1BDD-406E-898D-61811935B793}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

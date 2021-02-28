@@ -1,6 +1,6 @@
 ﻿using Reminders.Core.Controls;
 
-namespace Reminders
+namespace Reminders.Settings
 {
     public partial class Shell : MaterialWindow
     {

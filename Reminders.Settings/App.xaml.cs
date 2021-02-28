@@ -3,9 +3,9 @@ using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Regions;
 using Reminders.Core;
-using Reminders.Views;
+using Reminders.Settings.Views;
 
-namespace Reminders
+namespace Reminders.Settings
 {
     /// <summary>
     /// Interaction logic for App.xaml

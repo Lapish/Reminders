@@ -1,7 +1,7 @@
 ﻿using System.Windows.Controls;
-using Reminders.ViewModels;
+using Reminders.Settings.ViewModels;
 
-namespace Reminders.Views
+namespace Reminders.Settings.Views
 {
     public partial class ConfigView : UserControl
     {

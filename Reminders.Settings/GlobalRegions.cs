@@ -1,4 +1,4 @@
-﻿namespace Reminders
+﻿namespace Reminders.Settings
 {
     public static class GlobalRegions
     {
