@@ -11,6 +11,9 @@ namespace Reminders.Core
     {
         public void OnInitialized(IContainerProvider containerProvider)
         {
+            containerProvider.Resolve<IInputService>();
+            containerProvider.Resolve<IMessageService>();
+            containerProvider.Resolve<IReminderService>();
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)

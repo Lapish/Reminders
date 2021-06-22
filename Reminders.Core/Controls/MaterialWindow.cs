@@ -14,7 +14,6 @@ namespace Reminders.Core.Controls
         private const string MaximizeRestoreButtonName = "maximizeRestoreButton";
         private const string CloseButtonName = "closeButton";
 
-
         #region Properties
 
         public Brush MaterialForegroundBrush

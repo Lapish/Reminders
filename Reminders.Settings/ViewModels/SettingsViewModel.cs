@@ -1,18 +1,20 @@
-﻿using System.IO;
-using System.Reactive;
-using System.Reflection;
+﻿using Prism.Events;
 using Prism.Regions;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Reminders.Core.Config;
 using Reminders.Core.MVVM;
-using Reminders.Settings.Views;
+using Reminders.Settings.Events;
+using System.IO;
+using System.Reactive;
+using System.Reflection;
 
 namespace Reminders.Settings.ViewModels
 {
     public class SettingsViewModel : ViewModelBase
     {
         private IRegionManager _regionManager;
+        private IEventAggregator _eventAggregator;
 
         #region Properties
 
@@ -29,18 +31,21 @@ namespace Reminders.Settings.ViewModels
         #region Commands
 
         public ReactiveCommand<Unit, Unit> ShowHideNotificationWindowCommand { get; set; }
-        public ReactiveCommand<Unit, Unit> GoBackCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> NavigateRemindersCommand { get; private set; }
 
         #endregion
 
         #region Constructors
 
-        public SettingsViewModel(IRegionManager regionManager)
+        public SettingsViewModel(
+            IRegionManager regionManager, 
+            IEventAggregator eventAggregator)
         {
             _regionManager = regionManager;
+            _eventAggregator = eventAggregator;
 
             ShowHideNotificationWindowCommand = ReactiveCommand.Create(OnShowHideNotificationWindowExecute);
-            GoBackCommand = ReactiveCommand.Create(OnGoBackExecute);
+            NavigateRemindersCommand = ReactiveCommand.Create(OnNavigateRemindersExecute);
             LoadLicense();
 
             RemindersConfig.Current.Language = Language;
@@ -52,9 +57,10 @@ namespace Reminders.Settings.ViewModels
 
         #region Private
 
-        private void OnGoBackExecute()
+        private void OnNavigateRemindersExecute()
         {
-            _regionManager.RequestNavigate(GlobalRegions.ContentRegion, nameof(RemindersView));
+            _eventAggregator.GetEvent<ChangedTransitionerContentEvent>().Publish(TransitionerContent.Reminders);
+            //_regionManager.RequestNavigate(GlobalRegions.ContentRegion, nameof(RemindersView));
         }
 
         private void LoadLicense()

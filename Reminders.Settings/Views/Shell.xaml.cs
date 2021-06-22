@@ -1,4 +1,5 @@
 ﻿using Reminders.Core.Controls;
+using System.Windows;
 
 namespace Reminders.Settings.Views
 {
@@ -7,11 +8,8 @@ namespace Reminders.Settings.Views
         public Shell()
         {
             InitializeComponent();
-        }
-
-        private void GoToGitlabButtonClickHandler(object sender, System.Windows.RoutedEventArgs e)
-        {
-
+            MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
+            MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
         }
     }
 }

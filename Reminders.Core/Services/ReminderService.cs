@@ -31,7 +31,7 @@ namespace Reminders.Core.Services
         {
             for(int i = 1; i <= 50; i++)
             {
-                await Task.Delay(2000);
+                await Task.Delay(200);
                 await AddAsync(new Reminder() { Text = $"Reminder {i}" });
             }
         }
