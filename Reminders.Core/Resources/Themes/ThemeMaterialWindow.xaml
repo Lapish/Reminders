@@ -123,7 +123,7 @@
         <Setter Property="Width" Value="24" />
         <Setter Property="Height" Value="24" />
         <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="Margin" Value="8,0,8,0" />
+        <Setter Property="Margin" Value="17,0,8,0" />
     </Style>
 
     <Style x:Key="MaterialWindowStyle" TargetType="{x:Type controls:MaterialWindow}">

@@ -1,22 +1,28 @@
-﻿using System;
+﻿using DynamicData;
+using DynamicData.Binding;
+using Prism.Services.Dialogs;
+using Reminders.Core.Models;
+using Reminders.Core.MVVM;
+using Reminders.Core.Services.Interfaces;
+using System;
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
-using DynamicData;
-using DynamicData.Binding;
-using Prism.Mvvm;
-using Reminders.Core.Models;
-using Reminders.Core.Services.Interfaces;
 
 namespace Reminders.Notifications.ViewModels
 {
-    public class NotificationViewModel : BindableBase
+    public class NotificationsViewModel : ViewModelBase
     {
         private IReminderService _reminderService;
 
         private readonly ReadOnlyObservableCollection<Reminder> _reminders;
+
+        public event Action<IDialogResult> RequestClose;
+
         public ReadOnlyObservableCollection<Reminder> Reminders => _reminders;
 
-        public NotificationViewModel(IReminderService reminderService)
+        public string Title => "";
+
+        public NotificationsViewModel(IReminderService reminderService)
         {
             _reminderService = reminderService;
 

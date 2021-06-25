@@ -4,7 +4,7 @@ using MaterialDesignThemes.Wpf;
 
 namespace Reminders.Settings.Controls
 {
-    public class MenuItem : ListViewItem
+    public class AmazingListViewItem : ListViewItem
     {
         public string Title
         {
@@ -12,9 +12,15 @@ namespace Reminders.Settings.Controls
             set { SetValue(TitleProperty, value); }
         }
         public static readonly DependencyProperty TitleProperty = DependencyProperty.Register(
-            "Title", typeof(string), typeof(MenuItem), new FrameworkPropertyMetadata(null, null));
+            "Title", typeof(string), typeof(AmazingListViewItem), new FrameworkPropertyMetadata(null, null));
 
-
+        public int Id
+        {
+            get { return (int)GetValue(IdProperty); }
+            set { SetValue(IdProperty, value); }
+        }
+        public static readonly DependencyProperty IdProperty =
+            DependencyProperty.Register("Id", typeof(int), typeof(AmazingListViewItem), new PropertyMetadata(0));
 
 
         public PackIconKind Icon
@@ -23,6 +29,7 @@ namespace Reminders.Settings.Controls
             set { SetValue(IconProperty, value); }
         }
         public static readonly DependencyProperty IconProperty =
-            DependencyProperty.Register("Icon", typeof(PackIconKind), typeof(MenuItem), new FrameworkPropertyMetadata(null, null));
+            DependencyProperty.Register("Icon", typeof(PackIconKind), typeof(AmazingListViewItem), new FrameworkPropertyMetadata(null, null));
+
     }
 }

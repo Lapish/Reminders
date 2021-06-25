@@ -2,7 +2,8 @@
 {
     public static class GlobalRegions
     {
-        public const string ContentRegion = "ContentRegion";
-        public const string BottomRegion = "BottomRegion";
+        public const string RemindersRegion = "RemindersRegion";
+        public const string SettingsRegion = "SettingsRegion";
+        public const string SnackbarRegion = "SnackbarRegion";
     }
 }

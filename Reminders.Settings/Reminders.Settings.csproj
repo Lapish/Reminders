@@ -6,6 +6,7 @@
     <AssemblyName>Reminders.Settings</AssemblyName>
     <ApplicationIcon>Resources\Icons\icon.ico</ApplicationIcon>
     <RootNamespace>Reminders.Settings</RootNamespace>
+    <NeutralLanguage>en-US</NeutralLanguage>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath></OutputPath>

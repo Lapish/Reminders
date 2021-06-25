@@ -10,9 +10,25 @@
                 <md:BundledTheme
                     BaseTheme="Light"
                     PrimaryColor="BlueGrey"
-                    SecondaryColor="LightGreen" />
+                    SecondaryColor="Blue" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="#62727B" />
+            <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="#FFF" />
+            <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="#37474f" />
+            <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="#FFF" />
+            <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="#102027" />
+
+            <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="#F9F9F9" />
+
+            <SolidColorBrush x:Key="SecondaryHueLightBrush" Color="#4FB3BF" />
+            <SolidColorBrush x:Key="SecondaryHueMidBrush" Color="#00838F" />
+            <SolidColorBrush x:Key="SecondaryHueDarkBrush" Color="#005662" />
+
+
+            <SolidColorBrush x:Key="MaterialDesignToolTipBackground" Color="#62727B" />
+
         </ResourceDictionary>
     </Application.Resources>
 </prism:PrismApplication>

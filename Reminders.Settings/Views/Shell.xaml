@@ -4,6 +4,7 @@
     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:prism="http://prismlibrary.com/"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:Reminders.Settings"
     xmlns:controls="clr-namespace:Reminders.Core.Controls;assembly=Reminders.Core"
     x:Name="shellWindow"
     Title="Reminders - настройка"
@@ -31,7 +32,7 @@
                     <Button
                         VerticalAlignment="Stretch"
                         Command="{Binding NavigateSettingsCommand}"
-                        Style="{StaticResource WindowButtonStyle}"
+                        Style="{StaticResource WindowButtonStyle}" IsEnabled="{Binding IsNavigationEnabled}"
                         ToolTip="Settings">
                         <md:PackIcon Kind="Settings" Style="{StaticResource WindowButtonIconStyle}" />
                     </Button>
@@ -49,35 +50,27 @@
         </DataTemplate>
     </controls:MaterialWindow.TitleTemplate>
 
-    <md:DialogHost>
-        <md:TransitioningContent OpeningEffect="{md:TransitionEffect FadeIn, Duration=0:0:0.7}">
-            <md:Transitioner x:Name="transitioner" SelectedIndex="{Binding TransitionerSelectedIndex, Mode=OneWay}">
-                <md:TransitionerSlide>
-                    <md:TransitionerSlide.ForwardWipe>
-                        <md:SlideWipe Direction="Right"/>
-                    </md:TransitionerSlide.ForwardWipe>
-                    <ContentControl prism:RegionManager.RegionName="RemindersRegion"/>
-                </md:TransitionerSlide>
-                <md:TransitionerSlide>
-                    <md:TransitionerSlide.BackwardWipe>
-                        <md:SlideWipe Direction="Left"/>
-                    </md:TransitionerSlide.BackwardWipe>
-                    <ContentControl prism:RegionManager.RegionName="SettingsRegion"/>
-                </md:TransitionerSlide>
+    <Grid>        
+        <md:DialogHost>
+            <md:TransitioningContent OpeningEffect="{md:TransitionEffect FadeIn, Duration=0:0:0.7}">
+                <md:Transitioner x:Name="transitioner" SelectedIndex="{Binding TransitionerSelectedIndex, Mode=OneWay}">
+                    <md:TransitionerSlide>
+                        <md:TransitionerSlide.ForwardWipe>
+                            <md:SlideWipe Direction="Right"/>
+                        </md:TransitionerSlide.ForwardWipe>
+                        <ContentControl prism:RegionManager.RegionName="{x:Static local:GlobalRegions.RemindersRegion}"/>
+                    </md:TransitionerSlide>
+                    <md:TransitionerSlide>
+                        <md:TransitionerSlide.BackwardWipe>
+                            <md:SlideWipe Direction="Left"/>
+                        </md:TransitionerSlide.BackwardWipe>
+                        <ContentControl prism:RegionManager.RegionName="{x:Static local:GlobalRegions.SettingsRegion}"/>
+                    </md:TransitionerSlide>
+                </md:Transitioner>
+            </md:TransitioningContent>
+        </md:DialogHost>
+        
+        <ContentControl prism:RegionManager.RegionName="{x:Static local:GlobalRegions.SnackbarRegion}"/>
+    </Grid>
 
-                <!--<md:TransitionerSlide>
-                    <md:TransitionerSlide.ForwardWipe>
-                        <md:SlideOutWipe/>
-                    </md:TransitionerSlide.ForwardWipe>
-                    <ContentControl prism:RegionManager.RegionName="RemindersRegion"/>
-                </md:TransitionerSlide>
-                <md:TransitionerSlide>
-                    <md:TransitionerSlide.BackwardWipe>
-                        <md:SlideOutWipe/>
-                    </md:TransitionerSlide.BackwardWipe>
-                    <ContentControl prism:RegionManager.RegionName="SettingsRegion"/>
-                </md:TransitionerSlide>-->
-            </md:Transitioner>
-        </md:TransitioningContent>
-    </md:DialogHost>
 </controls:MaterialWindow>

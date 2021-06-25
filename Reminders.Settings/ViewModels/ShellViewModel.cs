@@ -5,6 +5,7 @@ using Prism.Events;
 using Prism.Regions;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using Reminders.Core.Events;
 using Reminders.Core.MVVM;
 using Reminders.Settings.Events;
 using Reminders.Settings.Views;
@@ -26,6 +27,9 @@ namespace Reminders.Settings.ViewModels
         public double Opacity { get; private set; } = 0.0;
 
         [Reactive]
+        public bool IsNavigationEnabled { get; private set; } = true;
+
+        [Reactive]
         public int TransitionerSelectedIndex { get; private set; }
 
         public ShellViewModel(
@@ -35,6 +39,7 @@ namespace Reminders.Settings.ViewModels
             _regionManager = regionManager;
             _eventAggregator = eventAggregator;
 
+            eventAggregator.GetEvent<NavigationEnabledChangedEvent>().Subscribe((v) => IsNavigationEnabled = v);
             eventAggregator.GetEvent<ChangedShellBusyContent>().Subscribe((v)=> Opacity = 1.0);
             eventAggregator.GetEvent<ChangedTransitionerContentEvent>().Subscribe(OnChangedTransitionerContent);
 

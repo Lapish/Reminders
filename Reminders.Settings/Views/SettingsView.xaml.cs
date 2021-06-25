@@ -1,7 +1,9 @@
-﻿using System.Windows;
+﻿using Reminders.Settings.Controls;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
+using System.Linq;
 
 namespace Reminders.Settings.Views
 {
@@ -9,13 +11,14 @@ namespace Reminders.Settings.Views
     {
         #region Fields
 
-        private bool _menuIsOpen = true;
+        private bool _menuIsOpen = false;
 
         #endregion
 
         public SettingsView()
         {
             InitializeComponent();
+
         }
 
         private void ButtonMenu_Click(object sender, RoutedEventArgs e)
@@ -31,6 +34,32 @@ namespace Reminders.Settings.Views
                 sb.Begin();
             }
             _menuIsOpen = !_menuIsOpen;
+        }
+
+        private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (IsInitialized)
+            {
+                var menuItem = e.AddedItems[0] as AmazingListViewItem;
+                switch (menuItem.Id)
+                {
+                    case 0:
+                        generalPanel.BringIntoView();
+                        break;
+
+                    case 1:
+                        remindersPanel.BringIntoView();
+                        break;
+
+                    case 2:
+                        notificationsPanel.BringIntoView();
+                        break;
+
+                    case 3:
+                        aboutPanel.BringIntoView();
+                        break;
+                }
+            }
         }
     }
 }

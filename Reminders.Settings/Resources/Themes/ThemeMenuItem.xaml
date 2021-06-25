@@ -10,29 +10,45 @@
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type controls:MenuItem}">
-                    <StackPanel
-                        Height="40"
+                <ControlTemplate TargetType="{x:Type controls:AmazingListViewItem}">
+                    <Border Height="40" Background="Transparent">
+                        <StackPanel                        
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
-                        Background="Transparent"
                         Orientation="Horizontal">
-                        <Border Width="5" Background="{StaticResource SecondaryHueMidBrush}" />
-                        <md:PackIcon
+                            <Border Width="5" x:Name="border" Visibility="Hidden" Background="{StaticResource SecondaryHueMidBrush}" />
+                            <md:PackIcon
                             Width="25"
                             Height="25"
-                            Margin="10,0,0,0"
+                            Margin="11,0,0,0"
                             VerticalAlignment="Center"
                             Kind="{TemplateBinding Icon}" />
-                        <TextBlock
+                            <TextBlock
                             Margin="15,0,0,0"
                             VerticalAlignment="Center"
                             FontSize="14"
                             Text="{TemplateBinding Title}" />
-                    </StackPanel>
+                        </StackPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="False">
+                            <Setter TargetName="border" Property="Visibility" Value="Hidden"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="border" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="False">
+                <Setter Property="Opacity" Value="0.9" />
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Opacity" Value="1" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
 </ResourceDictionary>

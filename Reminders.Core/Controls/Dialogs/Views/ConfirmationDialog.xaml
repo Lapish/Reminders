@@ -25,7 +25,7 @@
             VerticalScrollBarVisibility="Auto">
             <TextBlock
                 Margin="8"
-                Foreground="{StaticResource MaterialDesignBodyLight}"
+                Foreground="{StaticResource MaterialDesignLightForeground}"
                 Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
                 Text="{Binding Message}"
                 TextWrapping="Wrap" />
@@ -56,7 +56,6 @@
                     <system:Boolean>False</system:Boolean>
                 </Button.CommandParameter>
             </Button>
-
         </StackPanel>
     </Grid>
 </UserControl>
