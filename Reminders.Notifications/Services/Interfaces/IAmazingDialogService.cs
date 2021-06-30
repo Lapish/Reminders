@@ -2,7 +2,7 @@
 {
     public interface IAmazingDialogService
     {
-        void Show();
+        void ShowAsync();
         void Close();
     }
 }

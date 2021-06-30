@@ -1,35 +1,46 @@
-﻿using System;
+﻿using DynamicData;
+using DynamicData.Binding;
+using Prism.Events;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
+using Reminders.Core.Config;
+using Reminders.Core.Exceptions;
+using Reminders.Core.Models;
+using Reminders.Core.MVVM;
+using Reminders.Core.Pipes;
+using Reminders.Core.Pipes.Interfaces;
+using Reminders.Core.Services.Interfaces;
+using Reminders.Settings.Events;
+using System;
 using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading;
-using System.Windows;
-using DynamicData;
-using DynamicData.Binding;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-using Reminders.Core.Exceptions;
-using Reminders.Core.Models;
-using Reminders.Core.MVVM;
-using Reminders.Core.Services.Interfaces;
+using System.Threading.Tasks;
 
 namespace Reminders.Settings.ViewModels
 {
     public class RemindersViewModel : ViewModelBase
     {
-        #region Services
+        #region Fields
 
+        private IEventAggregator _eventAggregator;
         private IReminderService _reminderService;
         private IMessageService _messageService;
         private IInputService _inputService;
+        private IPipeClient _pipeClient;
+
+        private readonly ReadOnlyObservableCollection<Reminder> _reminders;
+
+        private CancellationTokenSource _infinityUpdateTokenSource { get; set; }
 
         #endregion
 
         #region Properties
 
-        public int MaxTextLength { get; set; } = 50;
+        [Reactive]
+        public int MaxTextLength { get; set; } = GlobalConfig.Current.ReminderSection.MaxTextLength;
 
-        private readonly ReadOnlyObservableCollection<Reminder> _reminders;
         public ReadOnlyObservableCollection<Reminder> Reminders => _reminders;
 
         [Reactive]
@@ -48,19 +59,24 @@ namespace Reminders.Settings.ViewModels
         public ReactiveCommand<Unit, Unit> AddReminder { get; }
         public ReactiveCommand<Unit, Unit> RenameReminder { get; }
         public ReactiveCommand<Unit, Unit> DeleteReminder { get; }
+        public bool IsActive { get; set; }
 
         #endregion
 
         #region Constructors
 
         public RemindersViewModel(
+            IEventAggregator eventAggregator,
             IReminderService reminderService, 
             IMessageService messageService,
-            IInputService inputService)
+            IInputService inputService,
+            IPipeClient pipeClient)
         {
+            _eventAggregator = eventAggregator;
             _reminderService = reminderService;
             _messageService = messageService;
             _inputService = inputService;
+            _pipeClient = pipeClient;
 
             _reminderService
                 .Connect
@@ -68,6 +84,10 @@ namespace Reminders.Settings.ViewModels
                 .ObserveOnDispatcher()
                 .Bind(out _reminders)
                 .Subscribe();
+
+            _reminderService
+                .Connect
+                .Subscribe(_ => OnReminderChanged());                 
 
             var canAdd = this
                 .WhenAnyValue(x => x.Reminder.Text)
@@ -80,6 +100,19 @@ namespace Reminders.Settings.ViewModels
             RenameReminder = ReactiveCommand.Create(OnRename);
             AddReminder = ReactiveCommand.Create(OnAddAsync, canAdd);
             DeleteReminder = ReactiveCommand.Create(OnDelete, canDelete);
+
+            _eventAggregator.GetEvent<ChangedTransitionerContentEvent>().Subscribe(OnChangedTransitionerContent);
+
+            StartInfinityUpdateReminders();
+        }
+
+        private void OnChangedTransitionerContent(TransitionerContent content)
+        {
+            if (content == TransitionerContent.Settings)
+            {
+                _infinityUpdateTokenSource.Cancel();
+            }
+            _eventAggregator.GetEvent<ChangedTransitionerContentEvent>().Unsubscribe(OnChangedTransitionerContent);
         }
 
         #endregion
@@ -99,7 +132,8 @@ namespace Reminders.Settings.ViewModels
 
         private async void OnAddAsync()
         {
-            if (!_reminderService.Unique(Reminder.Text))
+            if (GlobalConfig.Current.ReminderSection.UniqueTextEnabled &&
+                !_reminderService.Unique(Reminder.Text))
             {
                 string title = "Добавление напоминания";
                 string message = $"Напоминание '{Reminder.Text}' уже существует. Все равно добавить ?";
@@ -121,28 +155,39 @@ namespace Reminders.Settings.ViewModels
 
         private async void OnDelete()
         {
-            string title = "Удаление напоминания";
-            string message = $"Вы действительно хотите удалить '{SelectedReminder.Text}' ?";
-
-            if (await _messageService.ShowConfirmationAsync(title, message) == MessageResult.OK)
+            if (GlobalConfig.Current.ReminderSection.DeleteConfirmationEnabled)
             {
-                try
+                string title = "Удаление напоминания";
+                string message = $"Вы действительно хотите удалить '{SelectedReminder.Text}' ?";
+
+                if (await _messageService.ShowConfirmationAsync(title, message) == MessageResult.Cancel)
                 {
-                    await _reminderService.DeleteAsync(SelectedReminder.Id);
+                    return;
                 }
-                catch (Exception ex)
-                {
-                    await _messageService.ShowInformationAsync("Ошибка удаления", ex.Message);
-                }
+            }
+
+            try
+            {
+                await _reminderService.DeleteAsync(SelectedReminder.Id);
+            }
+            catch (Exception ex)
+            {
+                await _messageService.ShowInformationAsync("Ошибка удаления", ex.Message);
             }
         }
 
         private async void OnRename()
         {
+            if (SelectedReminder is null)
+            {
+                return;
+            }
+
             try
             {
                 string title = "Переименование напоминания";
-                var newText = await _inputService.ShowAsync(title, SelectedReminder.Text);
+                var newText = await _inputService.ShowAsync(
+                    title, SelectedReminder.Text, GlobalConfig.Current.ReminderSection.MaxTextLength);
                 await _reminderService.RenameAsync(SelectedReminder.Id, newText);
             }
             catch (Exception ex)
@@ -154,27 +199,43 @@ namespace Reminders.Settings.ViewModels
             }
         }
 
+        private async void OnReminderChanged()
+        {
+            try
+            {
+                await _pipeClient.SendCommand(PipeCommand.UpdateReminders);
+            }
+            catch (OperationCanceledException)
+            {
+
+            }
+        }
+
         #endregion
 
-        public async void OnLoad()
+        private void StartInfinityUpdateReminders()
         {
-            while (true)
+            _infinityUpdateTokenSource = new CancellationTokenSource();
+            Task.Run(async () =>
             {
-                var cancellationToken = new CancellationTokenSource(10000).Token;
-                try
+                while (!_infinityUpdateTokenSource.IsCancellationRequested)
                 {
-                    await _reminderService.LoadDataAsync(cancellationToken);
-                    IsBusy = false;
-                    return;
-                }
-                catch (Exception ex)
-                {
-                    if (await _messageService.ShowConfirmationAsync("Ошибка загрузки данных", $"{ex.Message}\nПопробовать снова?") == MessageResult.Cancel)
+                    var cts = new CancellationTokenSource();
+                    cts.CancelAfter(5000);
+                    try
                     {
-                        Application.Current.Shutdown();
+                        await _reminderService.LoadDataAsync(cts.Token);
                     }
+                    catch (OperationCanceledException)
+                    {
+                    }
+                    catch
+                    {
+                    }
+                    IsBusy = false;
+                    await Task.Delay(2000);
                 }
-            }
+            });
         }
 
         #endregion

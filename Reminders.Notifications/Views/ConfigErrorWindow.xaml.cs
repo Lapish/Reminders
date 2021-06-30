@@ -1,35 +1,24 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media.Animation;
 
-namespace Reminders.Settings.Views
+namespace Reminders.Notifications.Views
 {
-    public partial class SplashWindow : Window
+    public partial class ConfigErrorWindow : Window
     {
         private CancellationTokenSource _cancellationTokenSource;
 
-        public void RunFadeAnimation(Action completedCallback)
-        {
-            DoubleAnimation anim = new DoubleAnimation(0, TimeSpan.FromSeconds(1));
-            anim.Completed += (s, _) => completedCallback?.Invoke();
-            BeginAnimation(OpacityProperty, anim);
-        }
-
-        public SplashWindow()
+        public ConfigErrorWindow(string error)
         {
             InitializeComponent();
             _cancellationTokenSource = new CancellationTokenSource();
+            errorTB.Text = error;
         }
 
-        public async Task ShowError(string error)
+        public async Task ShowAsync()
         {
-            errorTB.Text = error;
-            mainGrid.Visibility = Visibility.Collapsed;
-            secondGrid.Visibility = Visibility.Visible;
-
+            Show();
             await Task.Run(async () =>
             {
                 while (!_cancellationTokenSource.IsCancellationRequested)
@@ -44,6 +33,7 @@ namespace Reminders.Settings.Views
                     }
                 }
             });
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

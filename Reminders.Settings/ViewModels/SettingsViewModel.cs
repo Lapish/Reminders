@@ -1,4 +1,5 @@
 ﻿using Prism.Events;
+using Prism.Regions;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Reminders.Core.Config;
@@ -12,6 +13,8 @@ using Reminders.Settings.Events;
 using System;
 using System.IO;
 using System.Reactive;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,22 +27,16 @@ namespace Reminders.Settings.ViewModels
 
         private IEventAggregator _eventAggregator;
         private IMessageService _messageService;
-        private ISnackbarService _snackBarService;
         private IPipeClient _pipeClient;
-
-        private GlobalConfig _config;
 
         #endregion
 
         #region Properties
 
-        [Reactive]
         public GeneralSection GeneralSection { get; set; }
 
-        [Reactive]
         public ReminderSection ReminderSection { get; set; }
 
-        [Reactive]
         public NotificationWindowSection NotificationWindowSection { get; set; }
 
         public string License { get; private set; }
@@ -55,61 +52,104 @@ namespace Reminders.Settings.ViewModels
         #region Commands
 
         public ReactiveCommand<Unit, Unit> ShowHideNotificationWindowCommand { get; set; }
-        public ReactiveCommand<Unit, Unit> SaveCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> CancelCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> BackCommand { get; private set; }
 
         #endregion
 
         #region Constructors
 
         public SettingsViewModel(
-            IEventAggregator eventAggregator, 
+            IEventAggregator eventAggregator,
             IMessageService messageService,
-            ISnackbarService snackbarService,
             IPipeClient pipeClient)
         {
             _eventAggregator = eventAggregator;
             _messageService = messageService;
-            _snackBarService = snackbarService;
             _pipeClient = pipeClient;
 
-            _config = GlobalConfig.Current;
+            GeneralSection = (GeneralSection)GlobalConfig.Current.GeneralSection.Clone();
+            ReminderSection = (ReminderSection)GlobalConfig.Current.ReminderSection.Clone();
+            NotificationWindowSection = (NotificationWindowSection)GlobalConfig.Current.NotificationWindowSection.Clone();
+
+            GeneralSection
+                .Changed
+                //.Throttle(TimeSpan.FromMilliseconds(250))
+                .Subscribe(async _ => await OnConfigAnyValueChanged());
+
+            ReminderSection
+                .Changed
+               // .Throttle(TimeSpan.FromMilliseconds(250))
+                .Subscribe(async _ => await OnConfigAnyValueChanged());
+
+            NotificationWindowSection
+                .Changed
+              //  .Throttle(TimeSpan.FromMilliseconds(250))
+                .Subscribe(async _ => await OnConfigAnyValueChanged());
 
             _eventAggregator.GetEvent<NavigationEnabledChangedEvent>().Subscribe((v) => NavigationEnabled = v);
 
             ShowHideNotificationWindowCommand = ReactiveCommand.CreateFromTask(OnShowHideNotificationWindowExecuteAsync);
 
-            SaveCommand = ReactiveCommand.Create(OnSaveExecute);
-            CancelCommand = ReactiveCommand.Create(OnCancelExecute);
+            BackCommand = ReactiveCommand.Create(OnBackExecute);
 
-            SetupAnyValueChanged();
             LoadLicense();
         }
 
         #endregion
 
         #region Methods
-        
+
         #region Private
 
-        private void SetupAnyValueChanged()
+        private async Task OnConfigAnyValueChanged()
         {
-            GeneralSection = new GeneralSection();
-            ReminderSection = new ReminderSection();
-            NotificationWindowSection = new NotificationWindowSection();
-            //this.WhenAnyValue(x => x.Language).Subscribe((x) => _config.GeneralSection.Language = x);
-            //TransitionEffectKindSelected = TransitionEffectKind.SlideInFromBottom;
-            //this.WhenAnyValue(x => x.UniqueReminderEnabled).Subscribe((x) => _config.UniqueReminderEnabled = x);
-         //   this.WhenAnyValue(x => x.DeleteConfirmationEnabled).Subscribe((x) => _config.DeleteConfirmationEnabled = x);
+            GlobalConfig.Current.GeneralSection = (GeneralSection)GeneralSection.Clone();
+            GlobalConfig.Current.ReminderSection = (ReminderSection)ReminderSection.Clone();
+            GlobalConfig.Current.NotificationWindowSection = (NotificationWindowSection)NotificationWindowSection.Clone();
+
+            try
+            {
+                GlobalConfig.Save();
+                await _pipeClient.SendCommand(PipeCommand.UpdateConfig);
+            }
+            catch
+            {
+
+            }
+
+            //while (true)
+            //{
+            //    _eventAggregator.GetEvent<NavigationEnabledChangedEvent>().Publish(false);
+            //    var cancellationTokenSource = new CancellationTokenSource();
+            //    _snackBarService.ShowCircle("Соединение", 500, cancellationTokenSource.Token);
+            //    try
+            //    {
+            //        GlobalConfig.Save();
+            //        await _pipeClient.SendCommand(PipeCommand.UpdateConfig);
+            //        cancellationTokenSource.Cancel();
+            //        _snackBarService.Close();
+            //        break;
+            //    }
+            //    catch (OperationCanceledException)
+            //    {
+            //        _snackBarService.Close();
+            //        if (await _messageService.ShowConfirmationAsync("Ошибка соединения с сервисом", "Попробовать снова?") == MessageResult.Cancel)
+            //        {
+            //            break;
+            //        }
+            //    }
+            //    catch(Exception ex)
+            //    {
+            //        if (await _messageService.ShowConfirmationAsync(ex.Message, "Попробовать снова?") == MessageResult.Cancel)
+            //        {
+            //            break;
+            //        }
+            //    }
+            //}
+            //_eventAggregator.GetEvent<NavigationEnabledChangedEvent>().Publish(true);
         }
 
-        private void OnSaveExecute()
-        {
-            _config.GeneralSection = GeneralSection;
-            _config.Save();
-        }
-
-        private void OnCancelExecute()
+        private void OnBackExecute()
         {
             _eventAggregator.GetEvent<ChangedTransitionerContentEvent>().Publish(TransitionerContent.Reminders);
         }
@@ -131,20 +171,15 @@ namespace Reminders.Settings.ViewModels
             while (true)
             {
                 _eventAggregator.GetEvent<NavigationEnabledChangedEvent>().Publish(false);
-                var cancellationTokenSource = new CancellationTokenSource();
-                _snackBarService.ShowCircle("Соединение", 500, cancellationTokenSource.Token);
 
                 try
                 {
                     PipeCommand command = NotificationWindowShown ? PipeCommand.ShowWindow : PipeCommand.CloseWindow;
                     await _pipeClient.SendCommand(command);
-                    cancellationTokenSource.Cancel();
-                    _snackBarService.Close();
                     break;
                 }
                 catch (OperationCanceledException)
                 {
-                    _snackBarService.Close();
                     if (await _messageService.ShowConfirmationAsync("Ошибка соединения с сервисом", "Попробовать снова?") == MessageResult.Cancel)
                     {
                         NotificationWindowShown = !NotificationWindowShown;

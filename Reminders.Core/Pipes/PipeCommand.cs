@@ -4,6 +4,8 @@
     {
         ShowWindow,
         CloseWindow,
-        UpdateReminders        
+        UpdateConfig,
+        UpdateReminders,
+        TestConnection
     }
 }

@@ -15,6 +15,9 @@ namespace Reminders.Core.Controls.Dialogs.ViewModels
         public string Value { get; set; }
 
         [Reactive]
+        public int MaxTextLength { get; set; }
+
+        [Reactive]
         public bool IsSaveEnabled { get; set; }
 
         public InputDialogViewModel()

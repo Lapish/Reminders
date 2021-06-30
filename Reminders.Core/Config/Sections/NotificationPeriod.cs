@@ -7,8 +7,8 @@ namespace Reminders.Core.Config.Sections
     [JsonConverter(typeof(StringEnumConverter))]
     public enum NotificationPeriod
     {
-        [Description("One time after start")]
-        OneTimeAfterStart,
+        [Description("None")]
+        None,
 
         [Description("30 minutes")]
         M30,
@@ -29,6 +29,12 @@ namespace Reminders.Core.Config.Sections
         H5,
 
         [Description("6 hours")]
-        H6
+        H6,
+
+        [Description("7 hours")]
+        H7,
+
+        [Description("8 hours")]
+        H8
     }
 }

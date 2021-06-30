@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using System.Windows;
 using MaterialDesignThemes.Wpf;
 using Reminders.Core.Controls.Dialogs.ViewModels;
 using Reminders.Core.Services.Interfaces;
@@ -21,7 +22,10 @@ namespace Reminders.Core.Services
             _informationDialog.Title = title;
             _informationDialog.Message = message;
 
-            await DialogHost.Show(_informationDialog);           
+            await Application.Current.Dispatcher.Invoke(async () =>
+            {
+                await DialogHost.Show(_informationDialog);
+            });         
         }
 
         public async Task<MessageResult> ShowConfirmationAsync(string title, string message)
@@ -29,7 +33,11 @@ namespace Reminders.Core.Services
             _confirmationDialog.Title = title;
             _confirmationDialog.Message = message;
 
-            var result = (bool)await DialogHost.Show(_confirmationDialog);
+            bool result = await Application.Current.Dispatcher.Invoke(async() =>
+            {
+                return (bool)await DialogHost.Show(_confirmationDialog);
+            });
+
             return result ? MessageResult.OK : MessageResult.Cancel;
         }
     }

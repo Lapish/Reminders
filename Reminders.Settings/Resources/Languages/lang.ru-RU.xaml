@@ -9,25 +9,23 @@
 
     <!--  TransitionEffectKind enum  -->
     <v:String x:Key="Enum.TransitionEffectKind.None">Без анимации</v:String>
-    <v:String x:Key="Enum.TransitionEffectKind.ExpandIn">ExpandIn</v:String>
-    <v:String x:Key="Enum.TransitionEffectKind.FadeIn">FadeIn</v:String>
+    <v:String x:Key="Enum.TransitionEffectKind.ExpandIn">Растяжение</v:String>
+    <v:String x:Key="Enum.TransitionEffectKind.FadeIn">Проявление</v:String>
     <v:String x:Key="Enum.TransitionEffectKind.SlideInFromLeft">Слайд слева</v:String>
     <v:String x:Key="Enum.TransitionEffectKind.SlideInFromTop">Слайд сверху</v:String>
     <v:String x:Key="Enum.TransitionEffectKind.SlideInFromRight">Слайд справа</v:String>
     <v:String x:Key="Enum.TransitionEffectKind.SlideInFromBottom">Слайд снизу</v:String>
 
     <!--  WipeEffectKind  enum  -->
-    <v:String x:Key="Enum.WipeEffectKind.None">Без анимации</v:String>
     <v:String x:Key="Enum.WipeEffectKind.SlideInFromLeft">Слайд слева</v:String>
     <v:String x:Key="Enum.WipeEffectKind.SlideInFromTop">Слайд сверху</v:String>
     <v:String x:Key="Enum.WipeEffectKind.SlideInFromRight">Слайд справа</v:String>
     <v:String x:Key="Enum.WipeEffectKind.SlideInFromBottom">Слайд снизу</v:String>
-    <v:String x:Key="Enum.WipeEffectKind.Fade">Fade</v:String>
+    <v:String x:Key="Enum.WipeEffectKind.Fade">Проявление</v:String>
     <v:String x:Key="Enum.WipeEffectKind.Circle">Круг</v:String>
-    <v:String x:Key="Enum.WipeEffectKind.SlideOut">SlideOut</v:String>
 
     <!--  Notification Period  enum  -->
-    <v:String x:Key="Enum.NotificationPeriod.OneTimeAfterStart">Один раз после запуска</v:String>
+    <v:String x:Key="Enum.NotificationPeriod.None">Без периода</v:String>
     <v:String x:Key="Enum.NotificationPeriod.M30">30 минут</v:String>
     <v:String x:Key="Enum.NotificationPeriod.H1">1 час</v:String>
     <v:String x:Key="Enum.NotificationPeriod.H2">2 часа</v:String>
@@ -35,5 +33,7 @@
     <v:String x:Key="Enum.NotificationPeriod.H4">4 часа</v:String>
     <v:String x:Key="Enum.NotificationPeriod.H5">5 часов</v:String>
     <v:String x:Key="Enum.NotificationPeriod.H6">6 часов</v:String>
+    <v:String x:Key="Enum.NotificationPeriod.H7">7 часов</v:String>
+    <v:String x:Key="Enum.NotificationPeriod.H8">8 часов</v:String>
 
 </ResourceDictionary>

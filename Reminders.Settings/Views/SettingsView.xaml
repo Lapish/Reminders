@@ -9,8 +9,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:prism="http://prismlibrary.com/"
-    xmlns:scts="clr-namespace:Reminders.Core.Config.Sections;assembly=Reminders.Core"
-    xmlns:trs="clr-namespace:Reminders.Core.Transitions;assembly=Reminders.Core"
+    xmlns:scts="clr-namespace:Reminders.Core.Config.Sections;assembly=Core"
+    xmlns:trs="clr-namespace:Reminders.Core.Transitions;assembly=Core"
     d:DesignHeight="1000"
     prism:ViewModelLocator.AutoWireViewModel="True"
     FontFamily="Roboto"
@@ -106,7 +106,7 @@
                 </Style>
             </Grid.Resources>
 
-            <Grid>
+            <Grid IsEnabled="{Binding NavigationEnabled}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
@@ -173,7 +173,7 @@
                             <TextBlock Style="{StaticResource MaterialDesignHeadline4TextBlock}" Text="Окно уведомлений" />
 
                             <Grid Style="{StaticResource GridGroupStyle}">
-                                <TextBlock HorizontalAlignment="Left" Text="Показать окно" />
+                                <TextBlock HorizontalAlignment="Left" Text="Показать/Скрыть окно" />
                                 <ToggleButton
                                     Margin="10,0,0,0"
                                     HorizontalAlignment="Right"
@@ -244,8 +244,18 @@
                             <TextBlock Margin="0,20,0,0" Text="Период" />
                             <ComboBox
                                 Margin="0,8,0,0"
+                                md:ComboBoxAssist.ShowSelectedItem="True"
                                 ItemsSource="{ext:EnumBindingSource scts:NotificationPeriod}"
                                 SelectedItem="{Binding NotificationWindowSection.Period, Converter={StaticResource EnumToStringConverter}, Mode=TwoWay}" />
+
+                            <Grid Style="{StaticResource GridGroupStyle}">
+                                <TextBlock HorizontalAlignment="Left" Text="Показывать после старта" />
+                                <ToggleButton
+                                    Margin="10,0,0,0"
+                                    HorizontalAlignment="Right"
+                                    IsChecked="{Binding NotificationWindowSection.ShowAfterStartEnabled}" />
+
+                            </Grid>
                         </StackPanel>
 
                         <!--  About  -->
@@ -257,9 +267,10 @@
                                     Width="32"
                                     Height="32"
                                     HorizontalAlignment="Left"
-                                    Source="/Reminders.Settings;component/Resources/Icons/icon.ico" />
+                                    Source="/Settings;component/Resources/Icons/icon.ico" />
                                 <TextBlock
                                     Margin="10,0,0,0"
+                                    HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
                                     FontWeight="Medium"
                                     Style="{StaticResource MaterialDesignBody1TextBlock}"
@@ -287,7 +298,7 @@
                             </TextBlock>
 
                             <TextBlock Margin="0,20,0,0">
-                                <Run Text="Reminders использует следующие потрясающие технологии:" />
+                                <Run Text="Reminders использует следующие технологии:" />
                                 <LineBreak />
                                 <Hyperlink NavigateUri="https://github.com/dotnet/wpf">
                                     WPF
@@ -321,20 +332,15 @@
 
                 <StackPanel
                     Grid.Row="1"
-                    Margin="10,20,20,10"
+                    Margin="10,20,50,10"
                     HorizontalAlignment="Right"
                     Orientation="Horizontal">
                     <Button
-                        Width="150"
-                        Command="{Binding SaveCommand}"
-                        Content="Сохранить"
-                        Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"
-                        Style="{StaticResource MaterialDesignFlatAccentBgButton}" />
-                    <Button
-                        Width="150"
+                        Width="200"
                         Margin="20,0,0,0"
-                        Command="{Binding CancelCommand}"
-                        Content="Отмена"
+                        Command="{Binding BackCommand}"
+                        Content="Назад"
+                        Cursor="Hand"
                         Style="{StaticResource MaterialDesignFlatMidBgButton}" />
                 </StackPanel>
             </Grid>

@@ -12,11 +12,11 @@
                     PrimaryColor="LightGreen"
                     SecondaryColor="Teal" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
-                
-                <ResourceDictionary Source="pack://application:,,,/Reminders.Core;component/Resources/Themes/Generic.xaml" />
 
-                <ResourceDictionary Source="pack://application:,,,/Reminders.Settings;component/Resources/Languages/lang.ru-RU.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/Reminders.Settings;component/Resources/Themes/ThemeMenuItem.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Core;component/Resources/Themes/Generic.xaml" />
+
+                <ResourceDictionary Source="pack://application:,,,/Settings;component/Resources/Languages/lang.ru-RU.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Settings;component/Resources/Themes/ThemeMenuItem.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
 

@@ -1,17 +1,14 @@
 ﻿using Newtonsoft.Json;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using Reminders.Core.Config.Sections;
-using System;
 using System.IO;
 
 namespace Reminders.Core.Config
 {
     public sealed class GlobalConfig : ReactiveObject
     {
-        private static readonly Lazy<GlobalConfig> current =
-            new Lazy<GlobalConfig>();
-
-        public static GlobalConfig Current => current.Value;
+        public static GlobalConfig Current { get; private set; }
 
         [JsonProperty("General")]
         public GeneralSection GeneralSection { get; set; }
@@ -20,22 +17,41 @@ namespace Reminders.Core.Config
         public ReminderSection ReminderSection { get; set; }
 
         [JsonProperty("NotificationWindow")]
-        public NotificationWindowSection WindowSection { get; set; }
+        [Reactive]
+        public NotificationWindowSection NotificationWindowSection { get; set; }
 
         public GlobalConfig()
         {
             GeneralSection = new ();
             ReminderSection = new ();
-            WindowSection = new ();            
+            NotificationWindowSection = new ();            
         }
 
-        public void Save()
+        static GlobalConfig()
+        {
+            if (!File.Exists("config.json"))
+            {
+                using (StreamWriter sw = File.CreateText("config.json"))
+                {
+                    JsonSerializer serializer = new();
+                    serializer.Formatting = Formatting.Indented;
+                    serializer.Serialize(sw, new GlobalConfig());
+                }
+            }
+        }
+
+        public static void TryLoad()
+        {
+            Current = JsonConvert.DeserializeObject<GlobalConfig>(File.ReadAllText("config.json"));
+        }
+
+        public static void Save()
         {
             using (StreamWriter sw = File.CreateText("config.json"))
             {
                 JsonSerializer serializer = new ();
                 serializer.Formatting = Formatting.Indented;
-                serializer.Serialize(sw, this);
+                serializer.Serialize(sw, Current);
             }
         }
     }

@@ -51,7 +51,7 @@ namespace Reminders.Core.Pipes
                             });
                         }
                     }
-                    catch(Exception ex)
+                    catch
                     {
 
                     }

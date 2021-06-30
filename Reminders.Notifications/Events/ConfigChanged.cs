@@ -2,7 +2,7 @@
 
 namespace Reminders.Notifications.Events
 {
-    public class AllModulesLoaded : PubSubEvent
+    public class ConfigChanged : PubSubEvent
     {
     }
 }
