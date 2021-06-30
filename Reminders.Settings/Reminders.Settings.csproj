@@ -33,7 +33,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\icon_titlebar.ico" />
-    <Resource Include="tenor.gif" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MaterialDesignThemes" Version="4.1.0" />
