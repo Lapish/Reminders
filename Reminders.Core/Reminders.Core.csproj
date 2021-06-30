@@ -3,6 +3,11 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <AssemblyName>Core</AssemblyName>
+    <Authors>Lapish</Authors>
+    <Product>Reminders</Product>
+    <PackageProjectUrl>https://github.com/Lapish/Reminders</PackageProjectUrl>
+    <Copyright>Lapish</Copyright>
+    <PackageLicenseFile>License.txt</PackageLicenseFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath>..\build\debug</OutputPath>
@@ -10,6 +15,16 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>..\build\release</OutputPath>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Resources\License.txt" />
+    <None Include="Resources\License.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\License.txt" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MaterialDesignThemes" Version="4.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.7" />

@@ -5,6 +5,11 @@
     <UseWPF>true</UseWPF>
     <AssemblyName>Notifications</AssemblyName>
     <ApplicationIcon>Resources\Icons\icon.ico</ApplicationIcon>
+    <Authors>Lapish</Authors>
+    <Product>Reminders</Product>
+    <PackageProjectUrl>https://github.com/Lapish/Reminders</PackageProjectUrl>
+    <Copyright>Lapish</Copyright>
+    <PackageLicenseFile>License.txt</PackageLicenseFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath>..\build\debug</OutputPath>
@@ -14,6 +19,10 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Resources\Icons\icon.ico" />
+    <None Include="..\Reminders.Core\Resources\License.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />

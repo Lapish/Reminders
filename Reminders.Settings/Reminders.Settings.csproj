@@ -7,6 +7,11 @@
     <ApplicationIcon>Resources\Icons\icon.ico</ApplicationIcon>
     <RootNamespace>Reminders.Settings</RootNamespace>
     <NeutralLanguage>en-US</NeutralLanguage>
+    <Authors>Lapish</Authors>
+    <Product>Reminders</Product>
+    <PackageProjectUrl>https://github.com/Lapish/Reminders</PackageProjectUrl>
+    <Copyright>Lapish</Copyright>
+    <PackageLicenseFile>License.txt</PackageLicenseFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath>..\build\debug</OutputPath>
@@ -17,11 +22,11 @@
   <ItemGroup>
     <None Remove="Resources\Icons\icon.ico" />
     <None Remove="Resources\Icons\icon_titlebar.ico" />
-    <None Remove="Resources\License.txt" />
     <None Remove="tenor.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\License.txt" />
+    <None Include="..\Reminders.Core\Resources\License.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\icon.ico" />

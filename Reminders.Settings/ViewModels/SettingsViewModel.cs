@@ -73,12 +73,10 @@ namespace Reminders.Settings.ViewModels
 
             GeneralSection
                 .Changed
-                //.Throttle(TimeSpan.FromMilliseconds(250))
                 .Subscribe(async _ => await OnConfigAnyValueChanged());
 
             ReminderSection
                 .Changed
-               // .Throttle(TimeSpan.FromMilliseconds(250))
                 .Subscribe(async _ => await OnConfigAnyValueChanged());
 
             NotificationWindowSection
@@ -116,37 +114,6 @@ namespace Reminders.Settings.ViewModels
             {
 
             }
-
-            //while (true)
-            //{
-            //    _eventAggregator.GetEvent<NavigationEnabledChangedEvent>().Publish(false);
-            //    var cancellationTokenSource = new CancellationTokenSource();
-            //    _snackBarService.ShowCircle("Соединение", 500, cancellationTokenSource.Token);
-            //    try
-            //    {
-            //        GlobalConfig.Save();
-            //        await _pipeClient.SendCommand(PipeCommand.UpdateConfig);
-            //        cancellationTokenSource.Cancel();
-            //        _snackBarService.Close();
-            //        break;
-            //    }
-            //    catch (OperationCanceledException)
-            //    {
-            //        _snackBarService.Close();
-            //        if (await _messageService.ShowConfirmationAsync("Ошибка соединения с сервисом", "Попробовать снова?") == MessageResult.Cancel)
-            //        {
-            //            break;
-            //        }
-            //    }
-            //    catch(Exception ex)
-            //    {
-            //        if (await _messageService.ShowConfirmationAsync(ex.Message, "Попробовать снова?") == MessageResult.Cancel)
-            //        {
-            //            break;
-            //        }
-            //    }
-            //}
-            //_eventAggregator.GetEvent<NavigationEnabledChangedEvent>().Publish(true);
         }
 
         private void OnBackExecute()
@@ -156,8 +123,8 @@ namespace Reminders.Settings.ViewModels
 
         private void LoadLicense()
         {
-            var assembly = Assembly.GetExecutingAssembly();
-            var resourceName = "Reminders.Settings.Resources.License.txt";
+            var assembly = Assembly.LoadFrom("Core.dll");
+            var resourceName = "Reminders.Core.Resources.License.txt";
 
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
             using (StreamReader reader = new StreamReader(stream))
