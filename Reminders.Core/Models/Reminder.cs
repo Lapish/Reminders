@@ -1,6 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
-using ReactiveUI;
+﻿using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 namespace Reminders.Core.Models
@@ -23,6 +21,26 @@ namespace Reminders.Core.Models
             reminder.Text = Text;
 
             return reminder;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is not Reminder)
+            {
+                return false;
+            }
+
+            var other = (Reminder)obj;
+
+            return
+                Id.Equals(other.Id) &&
+                Position.Equals(other.Position) &&
+                Text.Equals(other.Text);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 }

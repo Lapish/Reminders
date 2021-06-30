@@ -1,0 +1,82 @@
+﻿<controls:MaterialWindow
+    x:Class="Reminders.Settings.Views.Shell"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Reminders.Core.Controls;assembly=Core"
+    xmlns:local="clr-namespace:Reminders.Settings"
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:prism="http://prismlibrary.com/"
+    xmlns:vms="clr-namespace:Reminders.Settings.ViewModels"
+    x:Name="shellWindow"
+    Title="Reminders"
+    MinWidth="750"
+    MinHeight="500"
+    prism:ViewModelLocator.AutoWireViewModel="True"
+    AllowsTransparency="True"
+    Opacity="{Binding Opacity}"
+    ShowInTaskbar="{Binding ShowInTaskbar}"
+    Style="{StaticResource MaterialWindowStyle}"
+    TitleIcon="/Settings;component/Resources/Icons/icon_titlebar.ico"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None">
+
+    <controls:MaterialWindow.TitleTemplate>
+        <DataTemplate>
+            <Grid DataContext="{Binding ElementName=shellWindow, Path=DataContext}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Style="{StaticResource WindowTitleTextBlockStyle}" Text="{Binding Path=Title, RelativeSource={RelativeSource AncestorType={x:Type controls:MaterialWindow}}}" />
+
+                <StackPanel
+                    Grid.Column="1"
+                    Margin="0,0,8,0"
+                    Orientation="Horizontal">
+                    <Button
+                        VerticalAlignment="Stretch"
+                        Command="{Binding NavigateSettingsCommand}"
+                        IsEnabled="{Binding IsNavigationEnabled}"
+                        Style="{StaticResource WindowButtonStyle}"
+                        ToolTip="Settings">
+                        <md:PackIcon Kind="Settings" Style="{StaticResource WindowButtonIconStyle}" />
+                    </Button>
+                    <Button
+                        Grid.Column="3"
+                        Margin="8,0,0,0"
+                        VerticalAlignment="Stretch"
+                        Command="{Binding OpenGitHubCommand}"
+                        Style="{StaticResource WindowButtonStyle}"
+                        ToolTip="GitHub">
+                        <md:PackIcon Kind="Github" Style="{StaticResource WindowButtonIconStyle}" />
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+    </controls:MaterialWindow.TitleTemplate>
+
+    <Grid>
+        <md:DialogHost Identifier="mainDialog">
+            <md:TransitioningContent OpeningEffect="{md:TransitionEffect Kind=FadeIn, Duration=0:0:0.4}">
+                <md:Transitioner x:Name="transitioner" SelectedIndex="{Binding TransitionerSelectedIndex, Mode=OneWay}">
+                    <md:TransitionerSlide>
+                        <md:TransitionerSlide.ForwardWipe>
+                            <md:SlideWipe Direction="Right" />
+                        </md:TransitionerSlide.ForwardWipe>
+                        <ContentControl prism:RegionManager.RegionName="{x:Static local:GlobalRegions.RemindersRegion}" />
+                    </md:TransitionerSlide>
+                    <md:TransitionerSlide>
+                        <md:TransitionerSlide.BackwardWipe>
+                            <md:SlideWipe Direction="Left" />
+                        </md:TransitionerSlide.BackwardWipe>
+                        <ContentControl prism:RegionManager.RegionName="{x:Static local:GlobalRegions.SettingsRegion}" />
+                    </md:TransitionerSlide>
+                </md:Transitioner>
+            </md:TransitioningContent>
+        </md:DialogHost>
+
+        <ContentControl prism:RegionManager.RegionName="{x:Static local:GlobalRegions.SnackbarRegion}" />
+    </Grid>
+
+</controls:MaterialWindow>

@@ -1,8 +1,8 @@
-﻿using System.Threading.Tasks;
-using MaterialDesignThemes.Wpf;
-using Reminders.Core.Dialogs.ViewModels;
+﻿using MaterialDesignThemes.Wpf;
+using Reminders.Core.Controls.Dialogs.ViewModels;
 using Reminders.Core.Exceptions;
 using Reminders.Core.Services.Interfaces;
+using System.Threading.Tasks;
 
 namespace Reminders.Core.Services
 {
@@ -15,10 +15,11 @@ namespace Reminders.Core.Services
             _inputDialog = inputDialog;
         }
 
-        public async Task<string> ShowAsync(string title, string sourceValue)
+        public async Task<string> ShowAsync(string title, string sourceValue, int maxTextLength)
         {
             _inputDialog.Title = title;
             _inputDialog.Value = sourceValue;
+            _inputDialog.MaxTextLength = maxTextLength;
 
             var result = (bool)await DialogHost.Show(_inputDialog);
 

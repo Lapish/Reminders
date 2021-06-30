@@ -1,12 +1,12 @@
-﻿using System;
+﻿using DynamicData;
+using Reminders.Core.Models;
+using Reminders.Core.Repositories.Interfaces;
+using Reminders.Core.Services.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using DynamicData;
-using Reminders.Core.Models;
-using Reminders.Core.Repositories.Interfaces;
-using Reminders.Core.Services.Interfaces;
 
 namespace Reminders.Core.Services
 {
@@ -67,8 +67,9 @@ namespace Reminders.Core.Services
 
         public async Task MoveAsync(int sourceIndex, int targetIndex)
         {
-            var sourceReminder = _reminders.Items.ElementAt(sourceIndex);
-            var targetReminder = _reminders.Items.ElementAt(targetIndex);
+            var col = _reminders.Items.OrderBy(x => x.Position).ToList();
+            var sourceReminder = col.ElementAt(sourceIndex);
+            var targetReminder = col.ElementAt(targetIndex);
             _ = sourceReminder ?? throw new ArgumentNullException(nameof(sourceReminder));
             _ = targetReminder ?? throw new ArgumentNullException(nameof(targetReminder));
 
@@ -90,7 +91,47 @@ namespace Reminders.Core.Services
         public async Task LoadDataAsync(CancellationToken token)
         {
             var data = await _reminderRepository.GetAllAsync(token);
-            _reminders.AddRange(data);
+            _reminders.Edit(r =>
+            {
+                UpdateData(data);
+            });
+        }
+
+        #endregion
+
+        #region Private 
+
+        private void UpdateData(IEnumerable<Reminder> newData)
+        {
+            var addedReminders = new List<Reminder>();
+
+            foreach(var oldReminder in _reminders.Items)
+            {
+                var reminder = newData.FirstOrDefault(x => x.Id.Equals(oldReminder.Id));
+
+                if (reminder != null)
+                {
+                    if (!reminder.Equals(oldReminder))
+                    {
+                        _reminders.Replace(oldReminder, reminder);
+                    }
+                    else
+                    {
+                        addedReminders.Add(reminder);
+                    }
+                }
+                else
+                {
+                    _reminders.Remove(oldReminder);
+                }
+            }
+
+            var newReminders = newData.Except(addedReminders).Except(_reminders.Items);
+
+            foreach (var newReminder in newReminders)
+            {
+                _reminders.Add(newReminder);
+            }
         }
 
         #endregion

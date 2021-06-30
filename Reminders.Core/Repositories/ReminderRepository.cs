@@ -5,7 +5,7 @@ namespace Reminders.Core.Repositories
 {
     public class ReminderRepository : Repository<Reminder>, IReminderRepository
     {
-        public ReminderRepository():base(new ReminderContext())
+        public ReminderRepository()
         {
         }
     }

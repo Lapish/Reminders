@@ -1,10 +1,11 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/Reminders.Core;component/Resources/Themes/ThemeMaterialWindow.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Reminders.Core;component/Resources/Themes/ThemeDialog.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Reminders.Core;component/Resources/Themes/ThemeReorderableListBox.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Reminders.Core;component/Resources/Themes/ThemeBusy.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Core;component/Resources/Themes/ThemeMaterialWindow.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Core;component/Resources/Themes/ThemeDialog.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Core;component/Resources/Themes/ThemeReorderableListBox.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Core;component/Resources/Themes/ThemeBusy.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Core;component/Resources/Themes/ThemeHyperlink.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>

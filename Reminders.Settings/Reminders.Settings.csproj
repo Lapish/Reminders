@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>Settings</AssemblyName>
+    <ApplicationIcon>Resources\Icons\icon.ico</ApplicationIcon>
+    <RootNamespace>Reminders.Settings</RootNamespace>
+    <NeutralLanguage>en-US</NeutralLanguage>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>..\build\debug</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\build\release</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Resources\Icons\icon.ico" />
+    <None Remove="Resources\Icons\icon_titlebar.ico" />
+    <None Remove="Resources\License.txt" />
+    <None Remove="tenor.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\License.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\icon_titlebar.ico" />
+    <Resource Include="tenor.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MaterialDesignThemes" Version="4.1.0" />
+    <PackageReference Include="Prism.Unity" Version="8.1.97" />
+    <PackageReference Include="ReactiveUI" Version="14.1.1" />
+    <PackageReference Include="ReactiveUI.Fody" Version="14.1.1" />
+    <PackageReference Include="ReactiveUI.WPF" Version="14.1.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Reminders.Core\Reminders.Core.csproj" />
+  </ItemGroup>
+</Project>

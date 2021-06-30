@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using ReactiveUI;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -13,7 +14,6 @@ namespace Reminders.Core.Controls
         private const string MinimizeButtonName = "minimizeButton";
         private const string MaximizeRestoreButtonName = "maximizeRestoreButton";
         private const string CloseButtonName = "closeButton";
-
 
         #region Properties
 

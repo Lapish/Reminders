@@ -9,5 +9,10 @@ namespace Reminders.Core
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
                     => options.UseSqlite("Data Source=Reminders.db");
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.HasChangeTrackingStrategy(ChangeTrackingStrategy.ChangingAndChangedNotificationsWithOriginalValues);
+        }
     }
 }
